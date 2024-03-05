@@ -1,25 +1,23 @@
-import logo from './logo.svg';
+
 import './App.css';
-import React,{useState} from 'react'
-import {firebase} from './firebase'
-import {addDoc,collection} from '@firebase/firestore'
+import React from 'react'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Read from "./component/Read";
 import Form from './component/Form';
+import Update from './component/Update';
 function App() {
-  const [transit,setTransit]=useState('');
-  const handleChange=(e)=>{
-    setTransit(e.target.value)
-  }
   return (
     <div className="App">
-     {/* <label>
-      set time:
-      <input
-      type='text'
-      value={transit}
-      onChange={(e)=>handleChange(e)} />
-     </label>
-     <button>submit</button> */}
-     <Form/>
+      <BrowserRouter>
+
+        <Routes>
+          <Route path="/" element={<Form />} />
+          <Route path="/Form" element={<Form />} />
+          <Route path="/read" element={<Read />} />
+          <Route path="/update/:firebaseId" element={ <Update/> } />
+        </Routes>
+
+      </BrowserRouter>
     </div>
   );
 }

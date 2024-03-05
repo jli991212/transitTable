@@ -1,27 +1,49 @@
-import { useState } from "react";
-import React from 'react';
-import app from '../firebase';
-import { useNavigate } from 'react-router-dom';
-
-import { getDatabase, ref, set, push } from "firebase/database";
+import React, { useState, useEffect } from 'react';
+import app from "../firebase";
+import { getDatabase, ref, set, get } from "firebase/database";
+import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
-function Form(props) {
+function Update() {
+
     const navigate = useNavigate();
+    const { firebaseId } = useParams();
+
 
     const [load, setLoad] = useState("load");
-    const [zone,setZone]=useState('');
-    const [cageNumber,setCageNumber]=useState(0);
-    const [gaylordNumber,setgaylordNumber]=useState(0);
-    const [palletNumber,setPalletNumber]=useState(0);
-    const [transitCricle,setTransitCricle]=useState( moment(new Date()).format('YYYY-MM-DD'));
+    const [zone, setZone] = useState('');
+    const [cageNumber, setCageNumber] = useState(0);
+    const [gaylordNumber, setgaylordNumber] = useState(0);
+    const [palletNumber, setPalletNumber] = useState(0);
+    const [transitCricle, setTransitCricle] = useState(moment(new Date()).format('YYYY-MM-DD'));
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const db = getDatabase(app);
+            const dbRef = ref(db,`TransitData/${transitCricle}/${firebaseId}`);
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+                const targetObject = snapshot.val();
+                setLoad(targetObject.load);
+                setZone(targetObject.zone);
+                setCageNumber(targetObject.cage);
+                setgaylordNumber(targetObject.gaylord);
+                setPalletNumber(targetObject.pallet);
+                setPalletNumber(targetObject.transitcricle);
+            } else {
+                alert("error");
+            }
+        }
+        fetchData();
+    }, [firebaseId])
+
     const handleChange = (event) => {
         setLoad(event.target.value);
     };
     const isChecked = (value) => load === value;
-    const saveData = async () => {
+
+    const overwriteData = async () => {
         const db = getDatabase(app);
-        const newDocRef = push(ref(db, `TransitData/${transitCricle}`));
-        console.log(transitCricle)
+        const newDocRef = ref(db,`TransitData/${transitCricle}/${firebaseId}`);
         set(newDocRef, {
             date: new Date().toLocaleString(),
             loadstatus:load ?load:'load',
@@ -30,13 +52,15 @@ function Form(props) {
             gaylord:gaylordNumber?gaylordNumber:0,
             pallet:palletNumber?palletNumber:0,
             transitcricle:transitCricle,
-        }).then( () => {
-          alert("data saved successfully")
+        }).then(() => {
+            alert("data updated successfully")
         }).catch((error) => {
-          alert("error: ", error.message);
+            alert("error: ", error.message);
         })
         navigate('/read')
-      }
+    }
+
+
     return (
         <>
         <fieldset>
@@ -87,12 +111,11 @@ function Form(props) {
                     <input type="date" value={transitCricle} placeholder='YYYY-MM-DD'onChange={(e)=>{setTransitCricle(e.target.value)}} min='01-01-2020' max='12-31-2030'/>
                 </label>
             </div>
-            <div><button onClick={saveData}>提交</button></div>
+            <div><button onClick={overwriteData}>提交</button></div>
             <div><button onClick={()=>{navigate('/read')}}>取消</button></div>
         </fieldset>
         </>
-
-    );
+    )
 }
 
-export default Form;
+export default Update;
