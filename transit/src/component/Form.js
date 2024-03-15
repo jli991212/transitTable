@@ -9,6 +9,8 @@ function Form(props) {
     const navigate = useNavigate();
 
     const [load, setLoad] = useState("load");
+    const [truckSize,setTruckSize]=useState('');
+    const [company,setCompany]=useState('');
     const [zone,setZone]=useState('');
     const [cageNumber,setCageNumber]=useState(0);
     const [gaylordNumber,setgaylordNumber]=useState(0);
@@ -25,13 +27,15 @@ function Form(props) {
         set(newDocRef, {
             date: new Date().toLocaleString(),
             loadstatus:load ?load:'load',
+            trucksize:truckSize?truckSize:'26',
+            company:company?company:'uniW2',
             zone:zone?zone:'A',
             cage:cageNumber?cageNumber:0,
             gaylord:gaylordNumber?gaylordNumber:0,
             pallet:palletNumber?palletNumber:0,
             transitcricle:transitCricle,
         }).then( () => {
-          alert("data saved successfully")
+          alert(`data ${newDocRef._path.pieces_[2]} saved successfully`)
         }).catch((error) => {
           alert("error: ", error.message);
         })
@@ -61,6 +65,26 @@ function Form(props) {
                         <option value="VGS">VGS</option>
                         <option value="BAY">BAY</option>
                     </select>
+                </label>
+            </div>
+            <div>
+                <label>
+                    卡车类型/Truck size
+                    <select name="trucksize" value={truckSize} onChange={(e)=>setTruckSize(e.target.value)}>
+                    <option value="26">26</option>
+                        <option value="53">53</option>
+                        </select>
+                </label>
+            </div>
+            <div>
+                <label>
+                    承包商/company
+                    <select name="company" value={company} onChange={(e)=>setCompany(e.target.value)}>
+                    <option value="UniW2">uni-w2</option>
+                        <option value="JS">j&s</option>
+                        <option value="Jason">jason</option>
+                        <option value="TG">TG</option>
+                        </select>
                 </label>
             </div>
             <div>

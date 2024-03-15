@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import app from "../firebase";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get,update } from "firebase/database";
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment';
 function Update() {
 
     const navigate = useNavigate();
-    const { firebaseId } = useParams();
+    const {  transitCricle,firebaseId } = useParams();
 
 
     const [load, setLoad] = useState("load");
     const [zone, setZone] = useState('');
+    const [truckSize,setTruckSize]=useState('');
+    const [company,setCompany]=useState('');
     const [cageNumber, setCageNumber] = useState(0);
     const [gaylordNumber, setgaylordNumber] = useState(0);
     const [palletNumber, setPalletNumber] = useState(0);
-    const [transitCricle, setTransitCricle] = useState(moment(new Date()).format('YYYY-MM-DD'));
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,11 +25,12 @@ function Update() {
             if (snapshot.exists()) {
                 const targetObject = snapshot.val();
                 setLoad(targetObject.load);
+                setTruckSize(targetObject.truckSize);
+                setCompany(targetObject.company);
                 setZone(targetObject.zone);
                 setCageNumber(targetObject.cage);
                 setgaylordNumber(targetObject.gaylord);
                 setPalletNumber(targetObject.pallet);
-                setPalletNumber(targetObject.transitcricle);
             } else {
                 alert("error");
             }
@@ -44,10 +46,12 @@ function Update() {
     const overwriteData = async () => {
         const db = getDatabase(app);
         const newDocRef = ref(db,`TransitData/${transitCricle}/${firebaseId}`);
-        set(newDocRef, {
-            date: new Date().toLocaleString(),
+        update(newDocRef, {
+           // date: new Date().toLocaleString(),
             loadstatus:load ?load:'load',
             zone:zone?zone:'A',
+            trucksize:truckSize?truckSize:'26',
+            company:company?company:'uniW2',
             cage:cageNumber?cageNumber:0,
             gaylord:gaylordNumber?gaylordNumber:0,
             pallet:palletNumber?palletNumber:0,
@@ -89,6 +93,26 @@ function Update() {
             </div>
             <div>
                 <label>
+                    卡车类型/Truck size
+                    <select name="trucksize" value={truckSize} onChange={(e)=>setTruckSize(e.target.value)}>
+                    <option value="26">26</option>
+                        <option value="53">53</option>
+                        </select>
+                </label>
+            </div>
+            <div>
+                <label>
+                    承包商/company
+                    <select name="company" value={company} onChange={(e)=>setCompany(e.target.value)}>
+                    <option value="UniW2">uni-w2</option>
+                        <option value="JS">j&s</option>
+                        <option value="Jason">jason</option>
+                        <option value="TG">TG</option>
+                        </select>
+                </label>
+            </div>
+            <div>
+                <label>
                     铁笼/cage:
                     <input type="text" value={cageNumber} onChange={(e)=>{setCageNumber(e.target.value)}} />
                 </label>
@@ -103,12 +127,6 @@ function Update() {
                 <label>
                     板数/pallet:
                     <input type="text" value={palletNumber} onChange={(e)=>{setPalletNumber(e.target.value)}} />
-                </label>
-            </div>
-            <div>
-                <label>
-                    转运周期/transit Cricle:
-                    <input type="date" value={transitCricle} placeholder='YYYY-MM-DD'onChange={(e)=>{setTransitCricle(e.target.value)}} min='01-01-2020' max='12-31-2030'/>
                 </label>
             </div>
             <div><button onClick={overwriteData}>提交</button></div>

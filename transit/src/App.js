@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<Form />} />
           <Route path="/Form" element={<Form />} />
           <Route path="/read" element={<Read />} />
-          <Route path="/update/:firebaseId" element={ <Update/> } />
+          <Route path="/update/:transitCricle/:firebaseId" element={ <Update/> } />
         </Routes>
 
       </BrowserRouter>
