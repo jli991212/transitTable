@@ -54,7 +54,7 @@ function Update() {
             trucksize:truckSize?truckSize:'26',
             cage:cageNumber?cageNumber:0,
             gaylord:gaylordNumber?gaylordNumber:0,
-            person:person?person:'',
+            person:person,
             transitcricle:transitCricle,
         }).then(() => {
             alert("data updated successfully")
