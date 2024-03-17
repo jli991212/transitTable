@@ -17,13 +17,14 @@ function Read() {
     
       { field: 'transitID', headerName: 'tranit reference', width: 200 },
       { field: 'date', headerName: 'Date', width: 200 },
-      { field: 'loadstatus', headerName: 'Type', width: 70 },
+      // { field: 'loadstatus', headerName: 'Type', width: 70 },
       { field: 'trucksize', headerName: 'truck size', width: 70 },
-      { field: 'company', headerName: 'company', width: 70 },
+      // { field: 'company', headerName: 'company', width: 70 },
       { field: 'zone', headerName: 'from/to', width: 70 },
       { field: 'cage', headerName: 'number of cage', width: 70 },
       { field: 'gaylord', headerName: 'number of gaylord', width: 70 },
-      { field: 'pallet', headerName: 'number of pallet', width: 70 },
+      // { field: 'pallet', headerName: 'number of pallet', width: 70 },
+      { field: 'person', headerName: 'loading person', width: 200 },
       { field: 'transitcricle', headerName: 'transit cricle', width: 200 },
       {
         field: 'actions',
