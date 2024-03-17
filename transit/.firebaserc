@@ -1,11 +1,5 @@
 {
   "projects": {
     "default": "daily-transit-tool"
-  },
-  "targets": {},
-  "etags": {
-    "daily-transit-tool": {
-      "extensionInstances": {}
-    }
   }
 }

@@ -122,7 +122,7 @@ function Read() {
     const db = getDatabase(app);
     const dbRef = ref(db, `TransitData/${dates}/${ids}`);
     await remove(dbRef);
-    window.location.reload();
+    navigate("/")
   }
 
   return (
