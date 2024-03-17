@@ -4,10 +4,17 @@ import { getDatabase, ref, get, remove, orderByChild, startAt, endAt, orderByKey
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { Button } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbarContainer,GridToolbarExport } from '@mui/x-data-grid';
 
 import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport printOptions={{ disableToolbarButton: true }} />
+    </GridToolbarContainer>
+  );
+}
 function Read() {
   const navigate = useNavigate();
   const [date, setDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
@@ -196,6 +203,9 @@ function Read() {
           },
         }}
         pageSizeOptions={[5, 10]}
+        slots={{
+          toolbar: CustomToolbar,
+        }}
         
       />
       </div>
