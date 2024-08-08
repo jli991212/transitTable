@@ -17,6 +17,7 @@ function Update() {
     const [gaylordNumber, setgaylordNumber] = useState(0);
     // const [palletNumber, setPalletNumber] = useState(0);
     const [person,setPerson]=useState('');
+    const [note,setNote]=useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,6 +34,7 @@ function Update() {
                 setgaylordNumber(targetObject.gaylord);
                 // setPalletNumber(targetObject.pallet);
                 setPerson(targetObject.person);
+                setNote(targetObject.note);
             } else {
                 alert("error");
             }
@@ -55,6 +57,7 @@ function Update() {
             cage:cageNumber?cageNumber:0,
             gaylord:gaylordNumber?gaylordNumber:0,
             person:person,
+            note:note,
             transitcricle:transitCricle,
         }).then(() => {
             alert("data updated successfully")
@@ -85,9 +88,11 @@ function Update() {
                         <option value="D">D</option>
                         <option value="G">G</option>
                         <option value="S">S</option>
+                        <option value="YueJie">Yuejie</option>
                         <option value="PHX">PHX</option>
                         <option value="VGS">VGS</option>
                         <option value="BAY">BAY</option>
+                        <option value="WA">SEA/PDX</option>
                     </select>
                 </label>
             </div>
@@ -135,6 +140,17 @@ function Update() {
                     <input type="text" value={person} onChange={(e)=>{setPerson(e.target.value)}} />
                 </label>
             </div>
+            <div>
+                    <label>
+                        备注/note:
+                        <textarea
+                            rows="4"
+                            cols="50"
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                        ></textarea>
+                    </label>
+                </div>
             <div><button onClick={overwriteData}>提交</button></div>
             <div><button onClick={()=>{navigate('/read')}}>取消</button></div>
         </fieldset>

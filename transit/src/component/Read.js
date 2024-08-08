@@ -22,7 +22,7 @@ function Read() {
   let [transitArr, settransitArr] = useState([]);
   const [colDefs, setColDefs] = useState([
     
-      { field: 'transitID', headerName: 'tranit reference', width: 200 },
+      { field: 'formatedId', headerName: 'tranit reference', width: 200 },
       { field: 'date', headerName: 'Date', width: 200 },
       // { field: 'loadstatus', headerName: 'Type', width: 70 },
       { field: 'trucksize', headerName: 'truck size', width: 70 },
@@ -31,7 +31,8 @@ function Read() {
       { field: 'cage', headerName: 'number of cage', width: 70 },
       { field: 'gaylord', headerName: 'number of gaylord', width: 70 },
       // { field: 'pallet', headerName: 'number of pallet', width: 70 },
-      { field: 'person', headerName: 'loading person', width: 200 },
+      { field: 'person', headerName: 'loading person', width: 100 },
+      { field: 'note', headerName: 'note', width: 200 },
       { field: 'transitcricle', headerName: 'transit cricle', width: 200 },
       {
         field: 'actions',
@@ -101,6 +102,7 @@ function Read() {
           Object.keys(data[item]).map((ids) => {
             acc.push({
               transitID: ids,
+              formatedId:ids.slice(1),
               ...data[item][ids]
             })
           })

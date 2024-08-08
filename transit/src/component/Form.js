@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from 'react';
 import app from '../firebase';
 import { useNavigate } from 'react-router-dom';
@@ -15,8 +15,9 @@ function Form(props) {
     const [cageNumber, setCageNumber] = useState(0);
     const [gaylordNumber, setgaylordNumber] = useState(0);
     // const [palletNumber,setPalletNumber]=useState(0);
-    const [transitCricle, setTransitCricle] = useState(moment(new Date()).format('YYYY-MM-DD'));
+    const [transitCricle, setTransitCricle] = useState('');
     const [person, setPerson] = useState('');
+    const [note, setNote] = useState('')
     // const handleChange = (event) => {
     //     setLoad(event.target.value);
     // };
@@ -31,18 +32,19 @@ function Form(props) {
         // Check if the current time is between midnight and 8am
         if (currentTime.isBetween(midnight, eightAM)) {
             // If current time is between midnight and 8am, set date1 to yesterday
-          setTransitCricle(moment().subtract(1, 'days').format('YYYY-MM-DD'));
+            setTransitCricle(currentTime.subtract(1, 'days').format('YYYY-MM-DD'));
+
         } else {
             // If current time is not between midnight and 8am, set date1 to today
-          setTransitCricle(moment().format('YYYY-MM-DD'));
+            setTransitCricle(currentTime.format('YYYY-MM-DD'));
+
         }
     }
     const saveData = async () => {
         if (person) {
-            setTransitAuto();
             const db = getDatabase(app);
             const newDocRef = push(ref(db, `TransitData/${transitCricle}`));
-            console.log(transitCricle)
+            console.log('transitcricle is', transitCricle)
             set(newDocRef, {
                 date: new Date().toLocaleString(),
                 trucksize: truckSize ? truckSize : '26',
@@ -50,6 +52,7 @@ function Form(props) {
                 cage: cageNumber ? cageNumber : 0,
                 gaylord: gaylordNumber ? gaylordNumber : 0,
                 person: person,
+                note: note ? note : '',
                 transitcricle: transitCricle,
             }).then(() => {
                 console.log(newDocRef);
@@ -62,6 +65,9 @@ function Form(props) {
             alert('请输入登记人信息');
         }
     }
+    useEffect(() => {
+        setTransitAuto();
+    }, [])
     return (
         <>
             <fieldset>
@@ -82,9 +88,11 @@ function Form(props) {
                             <option value="D">D</option>
                             <option value="G">G</option>
                             <option value="S">S</option>
+                            <option value="YueJie">Yuejie</option>
                             <option value="PHX">PHX</option>
                             <option value="VGS">VGS</option>
                             <option value="BAY">BAY</option>
+                            <option value="WA">SEA/PDX</option>
                         </select>
                     </label>
                 </div>
@@ -130,6 +138,17 @@ function Form(props) {
                     <label>
                         登记人/load person:
                         <input type="text" value={person} onChange={(e) => { setPerson(e.target.value) }} />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        备注/note:
+                        <textarea
+                            rows="4"
+                            cols="50"
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                        ></textarea>
                     </label>
                 </div>
                 {/* <div>
